@@ -8,7 +8,7 @@ const connectToDataBase = async ()=>{
         });
         console.log("Mongoodb connected successfully");
     }
-    catch(error){
+    catch(error){ 
         console.log("Error while connecting database");
     }
 }
