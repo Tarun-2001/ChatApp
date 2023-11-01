@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const fetchuser= (req,res,next) =>{
+const protect= (req,res,next) =>{
     const token = req.header('auth-token')
     if(!token){
         res.status(401).send({error:"Please provide valid auth-token"})
@@ -13,4 +13,4 @@ const fetchuser= (req,res,next) =>{
     }
 }
 
-module.exports = fetchuser;
+module.exports = protect;

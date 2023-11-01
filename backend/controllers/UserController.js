@@ -1,5 +1,4 @@
 const User = require("../Models/UserModel");
-const asyncHandler = require("express-async-handler");
 const generateToke = require("../config/tokengeneration");
 const bcypt = require("bcrypt");
 const { validationResult } = require("express-validator"); //Importing validator dependencies

@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const {createUser,loginUser,allUsers} = require('../controllers/UserController');
-const fetchuser = require('../middleware/fetchuser')
+const protect = require('../middleware/protect')
 const {createUserValdiation,loginUserValidation} = require('../Validations/UserValidation')
 
 
 router.post('/',createUserValdiation,createUser);
-router.post('/login', loginUserValidation,fetchuser,loginUser); 
-router.get('/',fetchuser,allUsers)
+router.post('/login', loginUserValidation,protect,loginUser); 
+router.get('/',protect,allUsers)
 
 module.exports = router;
