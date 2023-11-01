@@ -12,10 +12,10 @@ function App() {
   return (
     <div>
        <Navbar></Navbar>
+       
     <Routes>
       <Route exact path="/login" element={<LoginPage />} />
-      <Route exact path="/signup" element={<SignUp />} />
-     
+      <Route exact path="/signup" element={<SignUp />} />   
     </Routes>
         </div>
   );
