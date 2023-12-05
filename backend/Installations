@@ -1,7 +1,7 @@
 npm i express
 npm i bcrypt
 npm i mongoose
-npm install express-validator
+npm i express-validator
 npm i cors 
 npm i jsonwebtoken
 npm i dotenv
