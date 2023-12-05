@@ -36,4 +36,19 @@ const sendMessage = async (req, res) => {
   }
 };
 
-module.exports = { sendMessage };
+const allMessages = async (req,res)=>{
+  try{
+    var messages = await Message.find({ChatId:req.params.chatId}).populate("ChatId")
+    messages = await User.populate(messages,{
+      path:"ChatId.users",
+      select:"email name pic"
+    })
+    res.status(200).json(messages)
+  }
+  catch(error){
+    res.status(400)
+    
+  }
+}
+
+module.exports = { sendMessage,allMessages };
