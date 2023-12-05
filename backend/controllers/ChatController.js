@@ -1,5 +1,6 @@
 const { async } = require("rxjs");
 const Chat = require("../Models/ChatModel");
+const User = require("../Models/UserModel");
 const accessChat = async (req, res) => {
   const { userId } = req.body;
   if (!userId) {
@@ -14,6 +15,10 @@ const accessChat = async (req, res) => {
   })
     .populate("users", "-password")
     .populate("latestMessage");
+    isChat = await User.populate(isChat,{
+      path:"latestMessage.sender",
+      select:"name email pic"
+    })
   if (isChat.length > 0) {
     res.send(isChat[0]);
   } else {
@@ -23,9 +28,8 @@ const accessChat = async (req, res) => {
     };
     try {
       const createdChat = await Chat.create(chatData);
-      const chat = await Chat.find(createdChat)
+      var chat = await Chat.findOne(createdChat)
         .populate("users", "-password")
-        .populate("latestMessage");
       res.status(200).json(chat);
     } catch (error) {
       res.status(400).json(error.message);
@@ -35,11 +39,17 @@ const accessChat = async (req, res) => {
 
 const fetchChats = async (req, res) => {
   try {
-    const allChats = await Chat.find({
+    var allChats = await Chat.find({
       users: { $elemMatch: { $eq: req.user.id } },
     })
       .populate("users", "-password")
       .populate("latestMessage");
+
+      allChats = await User.populate(allChats,{
+        path:"latestMessage.sender",
+        select:"name email pic"
+      })
+
     res.status(200).send(allChats);
   } catch (error) {
     res.status(400).json({ error: error.message });

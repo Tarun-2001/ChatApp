@@ -4,6 +4,7 @@ const data = require('./config/data')
 const connectToDataBase = require('./databaseConnection')
 const user = require('./routes/user')
 const chat = require('./routes/chat')
+const message = require('./routes/message')
 const app = express()  
 const {notFound,errorHandle} = require('./middleware/erroeHandle')
 app.use(express.json()); // to accept json data
@@ -16,6 +17,7 @@ app.get("/",(req,res)=>{
 })
 app.use('/api/user',user)
 app.use('/api/chat',chat)
+app.use('/api/message',message)
 app.use(notFound);
 app.use(errorHandle)
 const PORT = process.env.PORT || 5000
