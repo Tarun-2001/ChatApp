@@ -5,12 +5,11 @@
   "main": "server.js",
   "scripts": {
     "start": "concurrently \"cd frontend && npm start\" \"nodemon backend/server.js\""
-  }
-  
-  ,
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@chakra-ui/react": "^2.8.2",
     "bcrypt": "^5.1.1",
     "concurrently": "^8.2.2",
     "cors": "^2.8.5",
