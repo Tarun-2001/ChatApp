@@ -12,8 +12,8 @@ const ChatPage = () => {
     <div>
         {user&&<SideDrawer/>}
         <Box display="flex" w="100%" justifyContent="space-between" h="91.5vh" p="10px">
-            {user&&<ChatBox/>}
             {user&&<MyChats/>}
+            {user&&<ChatBox/>}
         </Box>
     </div>
   );
