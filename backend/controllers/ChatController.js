@@ -62,9 +62,9 @@ const createGroupChats = async (req, res) => {
   }
   var { name, users } = req.body;
   users = JSON.parse(users);
-  if (users.length <= 2) {
+  if (users.length < 2) {
     res
-      .status(404)
+      .status(400)
       .json({ message: "To create more than 2 users are required" });
   }
   users.push(req.user.id);
@@ -74,12 +74,12 @@ const createGroupChats = async (req, res) => {
     users: users,
     groupAdmin: req.user.id,
   });
-  const fullGroupChat = await Chat.find(groupChat)
+  const fullGroupChat = await Chat.findOne({ _id: groupChat._id })
     .populate("users", "-password")
     .populate("groupAdmin", "-password");
   res
     .status(200)
-    .json({ Message: "Successfully group created", fullGroupChat });
+    .json(fullGroupChat);
 };
 
 const renameGroup = async (req, res) => {

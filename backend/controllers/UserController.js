@@ -76,7 +76,7 @@ const allUsers = async (req, res) => {
           ],
         }
       : {};
-    const users = await (User.find(keyword).find({_id:{$ne:req.user.id}}));
+    const users = await User.find(keyword).find({_id: {$ne: req.user.id}}).select('-password');
     res.status(200).json(users);
   } catch (error) {
     res.status(400)

@@ -11,8 +11,9 @@ const ChatState = (props) => {
    }
    const [selectedChat, setSelectedChat] = useState()
    const [chats, setChats] = useState()
+   const [fetchAgain,setFetchAgain] = useState(false)
   return (
-    <chatContext.Provider value={{user,chats, setChats,selectedChat, setSelectedChat}}>
+    <chatContext.Provider value={{user,chats, setChats,selectedChat, setSelectedChat,fetchAgain,setFetchAgain}}>
         {props.children}
     </chatContext.Provider>
   );

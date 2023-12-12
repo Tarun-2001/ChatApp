@@ -5,10 +5,11 @@ import { AddIcon } from '@chakra-ui/icons';
 import { Button } from '@chakra-ui/button';
 import { getSender } from './Config/Logic';
 import ChatLoading from '../MixedComponents/ChatLoading';
+import GroupChat from '../MixedComponents/GroupChat';
 
 const MyChats = () => {
   const context = useContext(chatContext)
-  const {user,chats,setChats,selectedChat, setSelectedChat} = context;
+  const {user,chats,setChats,selectedChat, setSelectedChat,fetchAgain} = context;
   const toast = useToast()
   const fetchChats = async ()=>{
    try{
@@ -20,7 +21,6 @@ const MyChats = () => {
     })
     const resp = await data.json()
     setChats(resp)
-    // console.log(chats)
    }catch(error){
     toast({
       title:"Failed to load search data",
@@ -36,7 +36,7 @@ const MyChats = () => {
     return () => {
       fetchChats();
     };
-  }, []);
+  }, [fetchAgain]);
 
   return (
     <Box
@@ -59,7 +59,9 @@ const MyChats = () => {
       alignItems="center"
       >
         MyChats
+        <GroupChat>
         <Button  rightIcon={<AddIcon/>} display="flex" fontSize={{base:"17px",md:"15px",lg:"19px"}}>New Group Chat</Button>
+        </GroupChat>
       </Box>
       <Box
         display="flex"
@@ -71,10 +73,9 @@ const MyChats = () => {
         borderRadius="lg"
         overflowY="hidden"
       >
-        {console.log(chats+" fsdf")}
         {chats ? (
           <Stack overflowY="scroll">
-            {chats.map((chat) => (
+            {chats.map((chat) =>  ( 
               <Box
                 onClick={() => setSelectedChat(chat)}
                 cursor="pointer"
@@ -101,7 +102,7 @@ const MyChats = () => {
                 <Text>
                   {!chat.isGroupChat
                     ? getSender(user, chat.users)
-                    : "chat.chatName"}
+                    : chat.chatName}
                 </Text>
                 {chat.latestMessage && (
                   <Text fontSize="xs">
