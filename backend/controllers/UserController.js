@@ -9,7 +9,7 @@ const createUser = async (req, res) => {
     let success = false;
     return res.status(400).json({ err: err.array() });
   }
-  const { name, email, password } = req.body;
+  const { name, email, password,pic} = req.body;
   if (!name || !email || !password) {
     return res.status(400).json({ error: "Enter valid details" });
   }
@@ -24,6 +24,7 @@ const createUser = async (req, res) => {
     name: name,
     email: email,
     password: encryptPassword,
+    pic
   });
 
   if (user) {
@@ -59,7 +60,11 @@ const loginUser = async (req, res) => {
   const verifyPassowrd = await bcypt.compare(password, checkUser.password);
   if (verifyPassowrd) {
     return res.status(201).json({
-      message: "Login successfully",
+      _id: checkUser._id,
+      name: checkUser.name,
+      email: checkUser.email,
+      isAdmin: checkUser.isAdmin,
+      pic: checkUser.pic,
       token:generateToke(checkUser._id),
     });
   } else {

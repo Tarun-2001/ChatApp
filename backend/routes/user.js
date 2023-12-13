@@ -6,7 +6,7 @@ const {createUserValdiation,loginUserValidation} = require('../Validations/UserV
 
 
 router.post('/',createUserValdiation,createUser);
-router.post('/login', loginUserValidation,protect,loginUser); 
+router.post('/login', loginUserValidation,loginUser); 
 router.get('/',protect,allUsers)
 
 module.exports = router;
