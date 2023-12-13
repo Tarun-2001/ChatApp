@@ -3,7 +3,7 @@ import chatContext from '../Context/Chat/ChatContext';
 import { Avatar, Box, Stack, Text, useToast } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
 import { Button } from '@chakra-ui/button';
-import { getSender } from './Config/Logic';
+import { getProile, getSender } from './Config/Logic';
 import ChatLoading from '../MixedComponents/ChatLoading';
 import GroupChat from '../MixedComponents/GroupChat';
 
@@ -35,7 +35,6 @@ const MyChats = () => {
 
     useEffect(() => {
       setCurrentUser(JSON.parse(localStorage.getItem("userInfo")))
-      console.log(currentUser)
       fetchChats();
   }, [fetchAgain]);
 
@@ -89,7 +88,7 @@ const MyChats = () => {
                 display={"flex"}
                 mb={2}
                 w="100%"
-                h="35%"
+                h="100%"
                 alignItems={"center"}
               >
                 <Avatar
@@ -97,7 +96,7 @@ const MyChats = () => {
                 size="sm"
                 cursor="pointer"
                 name={getSender(currentUser, chat.users)}
-                src={user.src}
+                // src={getProile(currentUser,chat.users)}
               />
               <Box>
                 <Text>

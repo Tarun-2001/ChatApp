@@ -50,6 +50,17 @@ const Login = () => {
             }),
           });
           const result = await data.json()
+          if(data.status==400){
+            toast({
+                title: "User not exist",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+                position: "bottom",
+              });
+              setPicLoading(false);
+              return
+          }
           toast({
             title: "Login Successful",
             status: "success",
