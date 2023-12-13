@@ -14,7 +14,7 @@ const UserList = (props) => {
       }}
       w="100%"
       display="flex"
-      h="15%"
+      h="25%"
       alignItems="center"
       color="black"
       px={3}

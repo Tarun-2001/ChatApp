@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import HomePage from "./Pages/HomePage";
 import ChatPage from "./Pages/ChatPage";
 import ChatState from "./Context/Chat/ChatState";
+import SignUp from "./Authentication/SignUp";
 
 function App() {
   return (

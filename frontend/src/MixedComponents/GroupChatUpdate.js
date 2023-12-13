@@ -33,7 +33,7 @@ const GroupChatUpdate = () => {
             method:"PUT",
             headers:{
                 "Content-Type": "application/json",
-                "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NmYwNzU0ZTQ4MDNlYjg5ZmRmMjIwNiIsImlhdCI6MTcwMTc3NTE4OX0.0KqyFaJId7hKIDAT2gZacTQwJ1NE_8VpKXqUN31aL3w"
+                "auth-token": user.token
             },
             body: JSON.stringify({
                 chatId:selectedChat._id,
@@ -74,7 +74,7 @@ const GroupChatUpdate = () => {
         const data = await fetch(`http://localhost:5000/api/user?search=${query}`,{
           method: "GET",
           headers: {
-            "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NmYwNzU0ZTQ4MDNlYjg5ZmRmMjIwNiIsImlhdCI6MTcwMTc3NTE4OX0.0KqyFaJId7hKIDAT2gZacTQwJ1NE_8VpKXqUN31aL3w"
+            "auth-token": user.token
           }
           })
         setLoading(false)
@@ -109,7 +109,7 @@ const GroupChatUpdate = () => {
             method:"PUT",
             headers:{
                 "Content-Type": "application/json",
-                "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NmYwNzU0ZTQ4MDNlYjg5ZmRmMjIwNiIsImlhdCI6MTcwMTc3NTE4OX0.0KqyFaJId7hKIDAT2gZacTQwJ1NE_8VpKXqUN31aL3w"
+                "auth-token": user.token
             },
             body: JSON.stringify({
                 chatId:selectedChat._id,
@@ -161,7 +161,7 @@ const GroupChatUpdate = () => {
             method:"PUT",
             headers:{
                 "Content-Type": "application/json",
-                "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NmYwNzU0ZTQ4MDNlYjg5ZmRmMjIwNiIsImlhdCI6MTcwMTc3NTE4OX0.0KqyFaJId7hKIDAT2gZacTQwJ1NE_8VpKXqUN31aL3w"
+                "auth-token": user.token
             },
             body: JSON.stringify({
                 chatId:selectedChat._id,

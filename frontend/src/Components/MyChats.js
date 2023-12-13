@@ -1,4 +1,4 @@
-import React, { useContext,useEffect } from 'react';
+import React, { useContext,useEffect, useState } from 'react';
 import chatContext from '../Context/Chat/ChatContext';
 import { Avatar, Box, Stack, Text, useToast } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
@@ -11,13 +11,14 @@ const MyChats = () => {
   const context = useContext(chatContext)
   const {user,chats,setChats,selectedChat, setSelectedChat,fetchAgain} = context;
   const toast = useToast()
+  const [currentUser,setCurrentUser] = useState()
   const fetchChats = async ()=>{
    try{
     const data = await fetch('http://localhost:5000/api/chat',{
       method:'GET',
       headers:{
-        "auth-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NmYwNzU0ZTQ4MDNlYjg5ZmRmMjIwNiIsImlhdCI6MTcwMTc3NTE4OX0.0KqyFaJId7hKIDAT2gZacTQwJ1NE_8VpKXqUN31aL3w"
-      }
+        "auth-token":user.token
+    }
     })
     const resp = await data.json()
     setChats(resp)
@@ -33,9 +34,9 @@ const MyChats = () => {
   }
 
     useEffect(() => {
-    return () => {
+      setCurrentUser(JSON.parse(localStorage.getItem("userInfo")))
+      console.log(currentUser)
       fetchChats();
-    };
   }, [fetchAgain]);
 
   return (
@@ -95,13 +96,13 @@ const MyChats = () => {
                 mr={5}
                 size="sm"
                 cursor="pointer"
-                name={user.name}
+                name={getSender(currentUser, chat.users)}
                 src={user.src}
               />
               <Box>
                 <Text>
                   {!chat.isGroupChat
-                    ? getSender(user, chat.users)
+                    ? getSender(currentUser, chat.users)
                     : chat.chatName}
                 </Text>
                 {chat.latestMessage && (

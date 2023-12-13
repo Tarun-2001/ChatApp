@@ -15,6 +15,7 @@ import { BellIcon, ChevronDownIcon } from '@chakra-ui/icons'
 import ProfileModal from './ProfileModal';
 import ChatLoading from './ChatLoading';
 import UserList from '../Components/User/UserList';
+import { useNavigate } from 'react-router-dom';
 
 const SideDrawer = () => {
     const [search,setSearch] = useState("")
@@ -26,6 +27,12 @@ const SideDrawer = () => {
   const { user,setSelectedChat ,chats,setChats } = context;
   const { isOpen, onOpen, onClose } = useDisclosure()
   const toast = useToast()
+  const history = useNavigate()
+
+  const handleLogOut = ()=>{
+    localStorage.removeItem("userInfo")
+    history("/")
+  }
   const handleSearch = async ()=>{
     if(!search){
       toast({
@@ -42,7 +49,7 @@ const SideDrawer = () => {
         const data = await fetch(`http://localhost:5000/api/user?search=${search}`,{
           method: "GET",
           headers: {
-            "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NmYwNzU0ZTQ4MDNlYjg5ZmRmMjIwNiIsImlhdCI6MTcwMTc3NTE4OX0.0KqyFaJId7hKIDAT2gZacTQwJ1NE_8VpKXqUN31aL3w"
+            "auth-token": user.token
           }
           })
         setLoading(false)
@@ -67,7 +74,7 @@ const SideDrawer = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NmYwNzU0ZTQ4MDNlYjg5ZmRmMjIwNiIsImlhdCI6MTcwMTc3NTE4OX0.0KqyFaJId7hKIDAT2gZacTQwJ1NE_8VpKXqUN31aL3w"
+            "auth-token": user.token
           },
           body: JSON.stringify({
             userId:id
@@ -129,7 +136,7 @@ const SideDrawer = () => {
                 <ProfileModal user = {user}>
                 <MenuItem>My Profile</MenuItem>
                 </ProfileModal>
-                <MenuItem>Logout</MenuItem>
+                <MenuItem onClick={handleLogOut}>Logout</MenuItem>
             </MenuList>
         </Menu>
         </div>
