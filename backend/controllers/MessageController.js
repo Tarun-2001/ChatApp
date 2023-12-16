@@ -21,15 +21,12 @@ const sendMessage = async (req, res) => {
       path: "ChatId.users",
       select: "name email pic",
     });
-    message = await User.populate(message, {
-        path: "ChatId.latestMessage"
-      });
      await Chat.findByIdAndUpdate(ChatId, {
         latestMessage: message,
       });
    
 
-    res.status(200).json({ message });
+    res.status(200).send(message);
   } catch (error) {
     res.status(400);
     throw new Error(error.message);
@@ -38,17 +35,25 @@ const sendMessage = async (req, res) => {
 
 const allMessages = async (req,res)=>{
   try{
-    var messages = await Message.find({ChatId:req.params.chatId}).populate("ChatId")
+    var messages = await Message.find({ChatId:req.params.chatId}).populate("ChatId Sender","-password")
     messages = await User.populate(messages,{
       path:"ChatId.users",
       select:"email name pic"
     })
+   
     res.status(200).json(messages)
   }
   catch(error){
     res.status(400)
     
+  } 
+}
+const deleteMessage = async (req,res)=>{
+  try{
+    const result = await Message.deleteMany({});
+    res.status(200).json(`${result.deletedCount} documents deleted.`)
   }
+  catch(error){}
 }
 
-module.exports = { sendMessage,allMessages };
+module.exports = { sendMessage,allMessages,deleteMessage };
