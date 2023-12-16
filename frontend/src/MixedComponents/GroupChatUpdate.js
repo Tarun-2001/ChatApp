@@ -14,7 +14,7 @@ import chatContext from "../Context/Chat/ChatContext";
 import UserBadge from "../Components/User/UserBadge";
 import UserList from "../Components/User/UserList";
 
-const GroupChatUpdate = () => {
+const GroupChatUpdate = (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const context = useContext(chatContext)
   const {user,selectedChat,setSelectedChat,fetchAgain,setFetchAgain} = context
@@ -24,6 +24,7 @@ const GroupChatUpdate = () => {
   const [loading, setLoading] = useState(false);
   const [renameloading, setRenameLoading] = useState(false);
   const toast = useToast();
+  const {fetchMessage} = props
 
   const handleRename = async ()=>{
     if(!groupChatName) return 
@@ -40,7 +41,6 @@ const GroupChatUpdate = () => {
                 chatName:groupChatName
               }),
         })
-        console.log(data)
         const res = await data.json()
         setSelectedChat(res)
         setFetchAgain(!fetchAgain)
@@ -120,6 +120,7 @@ const GroupChatUpdate = () => {
         if(rmUsr._id===user._id) setSelectedChat()
         else setSelectedChat(resp)
         setFetchAgain(!fetchAgain);
+        fetchMessage()
         setLoading(false);
     } catch (error) {
       toast({

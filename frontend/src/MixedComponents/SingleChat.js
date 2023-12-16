@@ -1,14 +1,82 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import chatContext from '../Context/Chat/ChatContext';
-import { Box, IconButton, Text } from '@chakra-ui/react';
+import { Box, FormControl, IconButton, Input, Spinner, Text, useToast } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { getSender, getSenderFull } from '../Components/Config/Logic';
 import ProfileModal from './ProfileModal';
 import GroupChatUpdate from './GroupChatUpdate';
+import ScrollChat from './ScrollChat';
+import "../style.css"
 
 const SingleChat = () => {
     const context = useContext(chatContext)
     const {user,selectedChat,setSelectedChat,fetctAgain,setFetchAgain} = context
+    const [messages,setMessages] = useState([])
+    const [loading,setLoading] = useState(false)
+    const [newMessage , setNewMessage] = useState()
+    const toast = useToast()
+    const typingHandle = (e)=>{
+      setNewMessage(e.target.value)
+    }
+
+    const fetchMessage = async () =>{
+      try{
+        if(!selectedChat) return
+        setLoading(true)
+        const data = await fetch(`http://localhost:5000/api/message/${selectedChat._id}`,{
+        method:"GET",
+        headers:{
+          "auth-token":user.token
+        }
+      })
+      const resp = await data.json()
+      setMessages(resp)
+      setLoading(false)
+      }
+      catch(err){
+        toast({
+          title: "Error Occured!",
+          description: "Failed to send the Message",
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+          position: "bottom",
+        });
+      }
+
+    }
+    const sendMessage = async (event)=>{
+      if(event.key==="Enter"&&newMessage){
+        try{
+          setNewMessage("")
+          const data = await fetch('http://localhost:5000/api/message',{
+            method:"POST",
+            headers:{
+              "Content-Type": "application/json",
+              "auth-token":user.token,
+            },
+            body:JSON.stringify({
+              "Content":newMessage,
+              "ChatId":selectedChat._id
+            })
+          })
+          const resp = await data.json()
+          setMessages([...messages,resp])
+        }catch (error) {
+          toast({
+            title: "Error Occured!",
+            description: "Failed to send the Message",
+            status: "error",
+            duration: 2000,
+            isClosable: true,
+            position: "bottom",
+          });
+        }
+      }
+    }
+    useEffect(()=>{
+      fetchMessage()
+    },[selectedChat])
   return (
     <>
       {selectedChat?(<>
@@ -34,7 +102,7 @@ const SingleChat = () => {
                 </>
             ):(
                 <>{selectedChat.chatName.toUpperCase()}
-                <GroupChatUpdate></GroupChatUpdate>
+                <GroupChatUpdate fetchMessage = {fetchMessage}></GroupChatUpdate>
                 </>
                 
             )}
@@ -48,10 +116,32 @@ const SingleChat = () => {
             w="100%"
             h="100%"
             borderRadius="lg"
-            overflowY="hidden"></Box>
-        </>):<Box display={"flex"} alignItems={"center"} justifyContent={"center"} h={"100%"}>
+            overflowY="hidden">
+              {loading?<Spinner 
+              size={"xl"}
+              w={20}
+              h={20}
+              alignSelf={"center"}
+              margin={"auto"}
+              />:(
+              <div className='message'>
+                <ScrollChat messages = {messages}/>
+              </div>
+              )}
+              <FormControl onKeyDown={sendMessage} isRequired mt={3}>
+                <Input
+                variant = "filled"
+                bg={"#E0E0E0"}
+                placeholder='Enter Your Message Here'
+                onChange={typingHandle}
+                value={newMessage}
+                />
+              </FormControl>
+
+            </Box>
+        </>):(<Box display={"flex"} alignItems={"center"} justifyContent={"center"} h={"100%"}>
         <Text fontSize = "3xl" pb={3} > Select chat to start chating!!!</Text>
-       </Box>
+       </Box>)
        }
     </>
   );
