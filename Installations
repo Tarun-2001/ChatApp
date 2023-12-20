@@ -10,6 +10,7 @@ npm i dotenv
 npm i express-async-handler
 npm i nodemon
 npm i concurrently
+npm i socket.io
 
 
 /frontend -
@@ -18,3 +19,4 @@ npm i @chakra-ui/react @emotion/react @emotion/styled framer-motion
 npm i react-router-dom
 npm i @chakra-ui/icons
 npm i react-scrollable-feed
+npm i socket.io-client

@@ -21,4 +21,31 @@ app.use('/api/message',message)
 app.use(notFound);
 app.use(errorHandle)
 const PORT = process.env.PORT || 5000
-app.listen(PORT,console.log(`Server is running ${PORT}`))
+const server= app.listen(PORT,console.log(`Server is running ${PORT}`))
+
+const io= require('socket.io')(server,{
+    pingTimeout:60000,
+    cors:{
+        origin:'http://localhost:3000'
+    }
+})
+
+io.on("connection",(socket)=>{
+    console.log("Connected to socket.io")
+    socket.on("setUp",(data)=>{
+        socket.join(data._id)
+        socket.emit("connected")
+    })
+    socket.on('join chat',(room)=>{
+        socket.join(room)
+        console.log('user joined room'+room)
+    })
+    socket.on('new message',(newmsg)=>{
+        var chat = newmsg
+        if(!chat) return console.log("chat.users is not defined")
+        chat.ChatId.users.forEach(user => {
+            if(user._id==newmsg.Sender._id) return
+            socket.in(user._id).emit('message recieved',newmsg)
+        });
+    })
+})

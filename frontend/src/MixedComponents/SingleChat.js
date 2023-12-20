@@ -6,15 +6,22 @@ import { getSender, getSenderFull } from '../Components/Config/Logic';
 import ProfileModal from './ProfileModal';
 import GroupChatUpdate from './GroupChatUpdate';
 import ScrollChat from './ScrollChat';
+import io from 'socket.io-client'
 import "../style.css"
-
+const ENDPOINT= 'http://localhost:5000';
+var socket,selectedChatCompare;
 const SingleChat = () => {
     const context = useContext(chatContext)
     const {user,selectedChat,setSelectedChat,fetctAgain,setFetchAgain} = context
     const [messages,setMessages] = useState([])
     const [loading,setLoading] = useState(false)
     const [newMessage , setNewMessage] = useState()
+    const [socketConnected,setSocketConnected] = useState(false)
     const toast = useToast()
+
+   
+
+
     const typingHandle = (e)=>{
       setNewMessage(e.target.value)
     }
@@ -32,6 +39,7 @@ const SingleChat = () => {
       const resp = await data.json()
       setMessages(resp)
       setLoading(false)
+      socket.emit('join chat',selectedChat._id)
       }
       catch(err){
         toast({
@@ -61,6 +69,7 @@ const SingleChat = () => {
             })
           })
           const resp = await data.json()
+          socket.emit('new message',resp)
           setMessages([...messages,resp])
         }catch (error) {
           toast({
@@ -74,9 +83,33 @@ const SingleChat = () => {
         }
       }
     }
+
+
+    useEffect(()=>{
+      socket = io(ENDPOINT)
+      socket.emit("setUp",user)
+      socket.on("connection",()=>setSocketConnected(true))
+    },[])
+
     useEffect(()=>{
       fetchMessage()
+      selectedChatCompare = selectedChat
     },[selectedChat])
+
+
+    useEffect(()=>{
+      socket.on('message recieved',(newmsg)=>{
+        console.log(selectedChatCompare._id!==newmsg._id+" sdsfaf")
+        if(!selectedChatCompare||selectedChatCompare._id!==newmsg.ChatId._id){
+          //notify
+        }else{
+          
+          setMessages([...messages,newmsg])
+        }
+      })
+    })
+    
+   
   return (
     <>
       {selectedChat?(<>
