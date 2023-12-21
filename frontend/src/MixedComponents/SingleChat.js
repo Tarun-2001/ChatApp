@@ -99,7 +99,6 @@ const SingleChat = () => {
 
     useEffect(()=>{
       socket.on('message recieved',(newmsg)=>{
-        console.log(selectedChatCompare._id!==newmsg._id+" sdsfaf")
         if(!selectedChatCompare||selectedChatCompare._id!==newmsg.ChatId._id){
           //notify
         }else{
