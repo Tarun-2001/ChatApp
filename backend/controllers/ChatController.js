@@ -15,10 +15,10 @@ const accessChat = async (req, res) => {
   })
     .populate("users", "-password")
     .populate("latestMessage");
-    isChat = await User.populate(isChat,{
-      path:"latestMessage.sender",
-      select:"name email pic"
-    })
+  isChat = await User.populate(isChat, {
+    path: "latestMessage.sender",
+    select: "name email pic",
+  });
   if (isChat.length > 0) {
     res.send(isChat[0]);
   } else {
@@ -28,8 +28,7 @@ const accessChat = async (req, res) => {
     };
     try {
       const createdChat = await Chat.create(chatData);
-      var chat = await Chat.findOne(createdChat)
-        .populate("users", "-password")
+      var chat = await Chat.findOne(createdChat).populate("users", "-password");
       res.status(200).json(chat);
     } catch (error) {
       res.status(400).json(error.message);
@@ -45,10 +44,10 @@ const fetchChats = async (req, res) => {
       .populate("users", "-password")
       .populate("latestMessage");
 
-      allChats = await User.populate(allChats,{
-        path:"latestMessage.sender",
-        select:"name email pic"
-      })
+    allChats = await User.populate(allChats, {
+      path: "latestMessage.sender",
+      select: "name email pic",
+    });
 
     res.status(200).send(allChats);
   } catch (error) {
@@ -77,9 +76,7 @@ const createGroupChats = async (req, res) => {
   const fullGroupChat = await Chat.findOne({ _id: groupChat._id })
     .populate("users", "-password")
     .populate("groupAdmin", "-password");
-  res
-    .status(200)
-    .json(fullGroupChat);
+  res.status(200).json(fullGroupChat);
 };
 
 const renameGroup = async (req, res) => {
