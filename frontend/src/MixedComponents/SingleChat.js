@@ -4,6 +4,7 @@ import { Box, FormControl, IconButton, Input, Spinner, Text, useToast } from '@c
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { getSender, getSenderFull } from '../Components/Config/Logic';
 import ProfileModal from './ProfileModal';
+import ScrollToBottom from 'react-scroll-to-bottom';
 import GroupChatUpdate from './GroupChatUpdate';
 import ScrollChat from './ScrollChat';
 import io from 'socket.io-client'
@@ -156,9 +157,11 @@ const SingleChat = () => {
               alignSelf={"center"}
               margin={"auto"}
               />:(
-              <div className='message'>
+                <ScrollToBottom >
+                  <div className='message'>
                 <ScrollChat messages = {messages}/>
               </div>
+                </ScrollToBottom>
               )}
               <FormControl onKeyDown={sendMessage} isRequired mt={3}>
                 <Input

@@ -9,7 +9,7 @@ const ScrollChat = (props) => {
   const context = useContext(chatContext);
   const { user } = context;
   return (
-    <ScrollableFeed>
+    <div style={{ maxHeight: '1000px'}}>
         {messages?.map((ele, i) => {
           return (
             <div style={{ display: "flex" }} key={ele._id}>
@@ -45,7 +45,7 @@ const ScrollChat = (props) => {
             </div>
           );
         })}
-    </ScrollableFeed>
+    </div>
   );
 };
 
